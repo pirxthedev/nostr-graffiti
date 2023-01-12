@@ -1,2 +1,2 @@
-# chinvat
-A chrome extension bridging nostr to the rest of the web
+# nostr-graffiti
+Permissionless comment threads on the web built on nostr

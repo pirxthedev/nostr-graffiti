@@ -1,22 +1,22 @@
 {
-  "name": "chinvat",
+  "name": "nostr-graffiti",
   "version": "1.0.0",
-  "description": "A chrome extension bridging nostr to the rest of the web",
+  "description": "Permissionless comment threads on the web built on nostr",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pirxthedev/chinvat.git"
+    "url": "git+https://github.com/pirxthedev/nostr-graffiti.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pirxthedev/chinvat/issues"
+    "url": "https://github.com/pirxthedev/nostr-graffiti/issues"
   },
-  "homepage": "https://github.com/pirxthedev/chinvat#readme",
+  "homepage": "https://github.com/pirxthedev/nostr-graffiti#readme",
   "devDependencies": {
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
