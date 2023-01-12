@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "chinvat",
+  "description": "A chrome extension bridging nostr to the rest of the web",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_icon": "images/1016431036_cartoon_ostrich_wearing_purple_tinted_lenses__app_icon__sparse_color_palette.png"
+  },
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  }
+}

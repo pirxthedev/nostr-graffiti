@@ -1,0 +1,27 @@
+{
+  "name": "chinvat",
+  "version": "1.0.0",
+  "description": "A chrome extension bridging nostr to the rest of the web",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pirxthedev/chinvat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pirxthedev/chinvat/issues"
+  },
+  "homepage": "https://github.com/pirxthedev/chinvat#readme",
+  "devDependencies": {
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "nostr-tools": "^1.1.1"
+  }
+}
