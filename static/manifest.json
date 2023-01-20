@@ -1,8 +1,0 @@
-{
-  "manifest_version": 3,
-  "name": "Nostr Graffiti",
-  "version": "0.1.0",
-  "action": {
-    "default_popup": "index.html"
-  }
-}
