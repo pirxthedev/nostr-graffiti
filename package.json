@@ -21,7 +21,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "env": {
+      "webextensions": true
+    }
   },
   "browserslist": {
     "production": [
