@@ -1,5 +1,6 @@
-import {generatePrivateKey, getPublicKey} from 'nostr-tools'
 import React, { Component } from 'react';
+import { generatePrivateKey, getPublicKey } from 'nostr-tools';
+import { getCurrentUrl, postNote } from '../utils';
 
 let sk = generatePrivateKey() // `sk` is a hex string
 let pk = getPublicKey(sk) // `pk` is a hex string
@@ -9,8 +10,8 @@ class Post extends Component {
         super(props);
         this.state = {
             url: '',
-            content: 'default content',
-            relays: ['wss://nostr.zebedee.cloud'],
+            content: 'test',
+            relays: ['wss://brb.io'],
             sk: sk,
             pk: pk
         };
@@ -31,7 +32,13 @@ class Post extends Component {
     }
 
     handleSubmit(event) {
-        alert('Posting to nostr: ' + this.state.content);
+        postNote(
+            this.state.relays,
+            this.state.sk,
+            this.state.pk,
+            this.state.url,
+            this.state.content
+        );
         event.preventDefault();
     }
 
@@ -59,20 +66,5 @@ class Post extends Component {
         );
     }
 }
-
-async function getCurrentUrl() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let url = '';
-    try {
-        let [tab] = await chrome.tabs.query(queryOptions);
-        url = tab.url;
-    } catch (error) {
-        console.log("Not running as a Chrome extension. Fallback to URL of current page.");
-        url = window.location.href;
-    }
-    return url;
-}
-
 
 export default Post;

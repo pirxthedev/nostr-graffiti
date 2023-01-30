@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { relayInit } from 'nostr-tools';
+import { getCurrentUrl } from '../utils';
 
 class NoteFeed extends Component {
     constructor(props) {
@@ -12,8 +13,8 @@ class NoteFeed extends Component {
     }
 
     componentDidMount() {
-        getCurrentTab().then(tab => {
-            this.setState({ url: tab.url });
+        getCurrentUrl().then(url => {
+            this.setState({ url: url });
         });
 
         this.getNotes();
@@ -22,7 +23,7 @@ class NoteFeed extends Component {
     async getNotes() {
         const relay = relayInit(this.state.relays[0]);
         await relay.connect();
-    
+
         relay.on('connect', () => {
             console.log(`connected to ${relay.url}`)
         })
@@ -36,7 +37,7 @@ class NoteFeed extends Component {
                 "#r": [this.state.url]
             }
         ])
-    
+
         sub.on('event', event => {
             this.setState(prevState => (
                 {notes: [...prevState.notes, event]}
@@ -59,14 +60,6 @@ class NoteFeed extends Component {
         );
     }
 }
-
-async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
-}
-
 
 
 export default NoteFeed;
