@@ -1,70 +1,69 @@
-import React, { Component } from 'react';
-import { generatePrivateKey, getPublicKey } from 'nostr-tools';
-import { getCurrentUrl, postNote } from '../utils';
+import { useState, useEffect } from 'react';
+import {
+    generatePrivateKey,
+    getPublicKey,
+    getEventHash,
+    signEvent
+} from 'nostr-tools'
+import { useNostr } from 'nostr-react';
+import { getCurrentUrl } from '../utils';
 
-let sk = generatePrivateKey() // `sk` is a hex string
-let pk = getPublicKey(sk) // `pk` is a hex string
 
-class Post extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            url: '',
-            content: 'test',
-            relays: ['wss://brb.io'],
-            sk: sk,
-            pk: pk
-        };
+export default function Post() {
+    const [content, setContent] = useState('test');
+    const [url, setUrl] = useState('');
+    const [sk, setSk] = useState(generatePrivateKey());
+    const [pk, setPk] = useState(getPublicKey(sk));
+    const { publish } = useNostr();
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         getCurrentUrl().then(url => {
-            this.setState({ url: url });
+            setUrl(url);
         });
+    }, []);
 
+    const handleChange = (event) => {
+        setContent(event.target.value);
     }
 
-    handleChange(event) {
-        this.setState({content: event.target.value});
+    const handleSubmit = async (submit_event) => {
+        let event = {
+            kind: 1,
+            pubkey: pk,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [['r', url]],
+            content: content
+        }
+        event.id = getEventHash(event);
+        event.sig = signEvent(event, sk);
+
+        publish(event);
+
+        submit_event.preventDefault();
     }
 
-    handleSubmit(event) {
-        postNote(
-            this.state.relays,
-            this.state.sk,
-            this.state.pk,
-            this.state.url,
-            this.state.content
-        );
-        event.preventDefault();
-    }
-
-    render() {
-        return (
-            <div>
-                <div>Posting to nostr as: {this.state.pk}</div>
+    return (
+        <div>
+            <div>Posting to nostr as: {pk}</div>
+            <br />
+            <form onSubmit={handleSubmit}>
+            <label>
+                Content:
                 <br />
-                <form onSubmit={this.handleSubmit}>
-                <label>
-                    Content:
-                    <br />
-                    <textarea value={this.state.content} onChange={this.handleChange} />
-                </label>
+                <textarea value={content} onChange={handleChange} />
+            </label>
+            <br />
+            <label>
+                URL:
                 <br />
-                <label>
-                    URL:
-                    <br />
-                    <input type="text" disabled value={this.state.url} />
-                </label>
-                <br />
-                <input type="submit" value="Submit" />
-                </form>
-            </div>
-        );
-    }
+                <input type="text" disabled value={url} />
+            </label>
+            <br />
+            <input type="submit" value="Submit" />
+            </form>
+        </div>
+    );
 }
 
-export default Post;
+
+
