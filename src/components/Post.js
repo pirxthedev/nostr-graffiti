@@ -18,15 +18,25 @@ export default function Post() {
         });
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         // if window.nostr is defined and pk is length 0, call getPublicKey() to get the public key
         // of the user's Nostr identity
         if (window.nostr && pk.length === 0) {
             window.nostr.getPublicKey().then(pk => {
                 setPk(pk);
             });
+        } else {
+            // window.nostr may not be available because we are running from the chrome extension
+            // popup, so we need to request the public key from the active chrome tab
+            const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: ["content.js"]
+            });
+            const response = await chrome.tabs.sendMessage(tab.id, {method: "getPublicKey"});
+            setPk(response.pk);
         }
-    });
+    }, []);
 
     const handleChange = (event) => {
         setContent(event.target.value);
