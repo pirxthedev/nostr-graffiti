@@ -3,12 +3,15 @@
 // If it doesn't exist, then we need to inject the content script
 // and add a listener for the message
 graffitiLoaded = document.getElementById("graffitiLoaded");
+console.log(window.nostr);
 
 if (!graffitiLoaded) {
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
             if (request.method === "getPublicKey") {
-                sendResponse({pk: "hello"});
+                window.nostr.getPublicKey().then(pk => {
+                    sendResponse({pk: pk});
+                });
             }
         }
     );

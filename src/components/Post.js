@@ -11,6 +11,7 @@ export default function Post() {
     const [url, setUrl] = useState('');
     const [pk, setPk] = useState('');
     const { publish } = useNostr();
+    const nos2xId = "kpgefcfmnafjgpblomihpgmejjdanjjp";
 
     useEffect(() => {
         getCurrentUrl().then(url => {
@@ -26,15 +27,15 @@ export default function Post() {
                 setPk(pk);
             });
         } else {
-            // window.nostr may not be available because we are running from the chrome extension
-            // popup, so we need to request the public key from the active chrome tab
-            const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-            await chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                files: ["content.js"]
-            });
-            const response = await chrome.tabs.sendMessage(tab.id, {method: "getPublicKey"});
-            setPk(response.pk);
+            // send message to nos2x extension to get the public key
+            var pk = await chrome.runtime.sendMessage(
+                nos2xId,
+                {
+                    type: 'getPublicKey',
+                    params: {}
+                }
+            );
+            setPk(pk);
         }
     }, []);
 
@@ -45,14 +46,26 @@ export default function Post() {
     const handleSubmit = async () => {
         let event = {
             kind: 1,
-            pubkey: pk,
             created_at: Math.floor(Date.now() / 1000),
             tags: [['r', url]],
-            content: content
+            content: content,
+            id: null,
+            pubkey: null
         }
-        event.id = getEventHash(event);
-        event.sig = await window.nostr.signEvent(event);
+        console.log(event);
 
+        if (window.nostr) {
+            event = await window.nostr.signEvent(event);
+        } else {
+            event = await chrome.runtime.sendMessage(
+                nos2xId,
+                {
+                    type: 'signEvent',
+                    params: {event}
+                }
+            );
+        }
+        console.log(event);
         publish(event);
     }
 
