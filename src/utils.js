@@ -22,7 +22,7 @@ export async function createHighlightNote(content, url) {
         kind: 1,
         created_at: Math.floor(Date.now() / 1000),
         tags: [['r', url]],
-        content: content,
+        content: '"' + content + '"\n\n' + url,
         id: null,
         pubkey: null
     }
