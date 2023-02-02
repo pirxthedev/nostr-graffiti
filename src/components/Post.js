@@ -7,7 +7,7 @@ import { getCurrentUrl } from '../utils';
 
 
 export default function Post() {
-    const [content, setContent] = useState('test');
+    const [content, setContent] = useState('');
     const [url, setUrl] = useState('');
     const [pk, setPk] = useState('');
     const { publish } = useNostr();
@@ -71,21 +71,13 @@ export default function Post() {
 
     return (
         <div>
-            <div>Posting to nostr as: {pk}</div>
-            <br />
-            <label>
-                Content:
-                <br />
-                <textarea value={content} onChange={handleChange} />
-            </label>
-            <br />
-            <label>
-                URL:
-                <br />
-                <input type="text" disabled value={url} />
-            </label>
-            <br />
-            <button onClick={handleSubmit}>Submit</button>
+            <h3>Post to nostr about this page:</h3>
+            <p>
+                <textarea value={content} onChange={handleChange}/>
+            </p>
+            <p>
+                <button onClick={handleSubmit}>Submit</button>
+            </p>
         </div>
     );
 }

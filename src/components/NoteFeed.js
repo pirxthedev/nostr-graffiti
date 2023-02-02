@@ -24,9 +24,8 @@ export default function NoteFeed() {
 
     return (
         <div>
-            <div>Nostr posts about {url}</div>
             {events.map(event => (
-                <div key={event.id}>{event.content}</div>
+                <p><div key={event.id}>{event.content.replace(/https?:\/\/[^\s]+/g, '')}</div></p>
             ))}
         </div>
     );
