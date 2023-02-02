@@ -11,7 +11,8 @@ export default function NoteFeed() {
     const { events } = useNostrEvents({
         'filter': {
             'kinds': [1],
-            '#r': [url]
+            '#r': [url],
+            'since': 0
         }
     });
 
