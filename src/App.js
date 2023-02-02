@@ -6,7 +6,12 @@ import Post from './components/Post';
 const relayUrls = [
   'wss://brb.io',
   "wss://nostr-pub.wellorder.net",
-  "wss://relay.nostr.ch"
+  "wss://relay.nostr.ch",
+  "wss://nostr.fmt.wiz.biz",
+  "wss://nostr.oxtr.dev",
+  "wss://relay.damus.io",
+  "wss://relay.nostr.bg",
+  "wss://relay.snort.social"
 ];
 
 function App() {
