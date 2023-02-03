@@ -5,6 +5,8 @@ import {
 import { useNostrEvents } from 'nostr-react';
 import { getCurrentUrl } from '../utils';
 
+import { Note } from './Note';
+
 
 export default function NoteFeed() {
     const [url, setUrl] = useState('');
@@ -24,9 +26,9 @@ export default function NoteFeed() {
 
     return (
         <div>
-            {events.map(event => (
-                <p><div key={event.id}>{event.content.replace(url, '')}</div></p>
-            ))}
+        {events.map(event => (
+            <Note key={event.id} event={event} url={url} />
+        ))}
         </div>
     );
 }
