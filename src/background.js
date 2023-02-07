@@ -1,6 +1,7 @@
 import {
     createHighlightNote,
-    postEventToNostr
+    postEventToNostr,
+    updateEventsForUrl
 } from './utils.js';
 
 
@@ -16,5 +17,12 @@ chrome.contextMenus.onClicked.addListener(async function(clickData){
         let note = await createHighlightNote(clickData.selectionText, clickData.pageUrl);
         console.log(note);
         postEventToNostr(note);
+    }
+});
+
+// Handle messages from the content script or popup script
+chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
+    if (request.type === "updateEventsForUrl") {
+        await updateEventsForUrl(request.url);
     }
 });
