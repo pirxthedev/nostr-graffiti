@@ -1,7 +1,10 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/background.js",
+    entry: {
+        background: "./src/background.js",
+        content: "./src/content.js",
+    },
     mode: "production",
     module: {
         rules: [
@@ -23,7 +26,7 @@ module.exports = {
         extensions: [".tsx", ".ts", ".js"],
     },
     output: {
-        filename: "background.js",
+        filename: "[name].js",
         path: path.resolve(__dirname, ".", "build"),
     },
     devtool: "source-map"

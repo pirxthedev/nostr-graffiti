@@ -12,11 +12,16 @@ let contextMenuItem = {
 };
 chrome.contextMenus.create(contextMenuItem);
 
-chrome.contextMenus.onClicked.addListener(async function(clickData){
+chrome.contextMenus.onClicked.addListener(async function(clickData, tab){
     if (clickData.menuItemId == "postToNostr" && clickData.selectionText) {
-        let note = await createHighlightNote(clickData.selectionText, clickData.pageUrl);
-        console.log(note);
-        postEventToNostr(note);
+        // send message to content script to get current selection
+        const response = await chrome.tabs.sendMessage(
+            tab.id,
+            { type: 'getSelection' }
+        );
+        let event = await createHighlightNote(response.text, response.url, response.fragment);
+        postEventToNostr(event);
+        updateEventsForUrl(response.url);
     }
 });
 

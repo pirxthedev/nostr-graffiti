@@ -31,7 +31,7 @@ export function Note(props) {
           // maintain the same indentation as the image
           marginLeft: '40px',
         }}>
-          {props.event.content.replace(props.url, '')}
+          {props.event.content}
         </div>
       </div>
     </div>

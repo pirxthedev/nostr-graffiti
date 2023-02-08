@@ -16,17 +16,19 @@ export async function getCurrentUrl() {
     return url;
 }
 
-export async function createHighlightNote(content, url) {
+export async function createHighlightNote(text, url, fragment) {
 
+    // Create nostr event
     let event = {
         kind: 1,
         created_at: Math.floor(Date.now() / 1000),
         tags: [['r', url]],
-        content: '"' + content + '"\n\n' + url,
+        content: '"' + text + '"\n\n' + url + fragment,
         id: null,
         pubkey: null
     }
 
+    // Sign event
     let signed_event = await chrome.runtime.sendMessage(
         nos2xId,
         {
