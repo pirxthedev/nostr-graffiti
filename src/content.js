@@ -29,5 +29,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         // send the current selection to the background script
         sendResponse({text: selection.toString(), url: window.location.href, fragment: fragmentString});
+    } else if (request.type === "fragment") {
+        // See https://github.com/WICG/scroll-to-text-fragment/blob/main/fragment-directive-api.md
+        location.hash = request.fragment;
     }
 });

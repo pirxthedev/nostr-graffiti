@@ -133,3 +133,15 @@ export async function storeEventForUrl(event, url) {
     }
 
 }
+
+export async function sendFragmentToCurrentTab(url) {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    // if the url parameter contains the tab url
+    if (url.includes(tab.url)) {
+        // extract the text fragment from the url
+        const fragment = '#:~:text=' + url.split('#:~:text=')[1]; // TODO: This is a hack. Use a proper URL parser or regex
+        // Send a message to the current content script on the current tab
+        chrome.tabs.sendMessage(tab.id, { type: "fragment", fragment: fragment });
+    }
+}

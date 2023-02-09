@@ -1,6 +1,20 @@
 import { nip19 } from 'nostr-tools';
+import Linkify from 'react-linkify';
+import { sendFragmentToCurrentTab } from '../utils';
 
 export function Note(props) {
+
+  // create a function that will be called when a link is clicked
+  const onLinkClick = async (event) => {
+    console.log(event);
+    // if the click target is an a tag and the href contains a text fragment
+    if (event.target.tagName === 'A' && event.target.href.includes('#:~:text')) {
+      // prevent the default link click behavior
+      event.preventDefault();
+      // send the text fragment to the current tab
+      await sendFragmentToCurrentTab(event.target.href);
+    }
+  };
 
   return (
     <div key={props.key} style={{
@@ -26,13 +40,15 @@ export function Note(props) {
             float: 'left',
           }} />
         </a>
-        <div style={{
-          fontSize: '14px',
-          // maintain the same indentation as the image
-          marginLeft: '40px',
-        }}>
-          {props.event.content}
-        </div>
+        <Linkify>
+          <div onClick={onLinkClick} style={{
+            fontSize: '14px',
+            // maintain the same indentation as the image
+            marginLeft: '40px',
+          }}>
+            {props.event.content}
+          </div>
+        </Linkify>
       </div>
     </div>
   );
